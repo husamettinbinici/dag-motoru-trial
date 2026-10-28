@@ -29,7 +29,7 @@
             <h1 class="text-sm font-black tracking-wider text-amber-400 uppercase leading-none">MOTO DAĞ TRİAL</h1>
             <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-extrabold text-[10px] border border-amber-500/30">1080p HD</span>
           </div>
-          <p class="text-[11px] text-stone-400 font-semibold leading-tight">Yumuşatılmış Denge & Güçlü Tırmanış</p>
+          <p class="text-[11px] text-stone-400 font-semibold leading-tight">Yumuşak Süspansiyon & Düz Başlangıç Pisti</p>
         </div>
       </div>
 
@@ -119,18 +119,18 @@
     <!-- Bottom Controls Guide -->
     <div class="w-full bg-stone-950 px-5 py-2.5 border-t border-stone-800 text-xs text-stone-400 flex flex-wrap justify-between items-center gap-2">
       <div class="flex items-center gap-4">
-        <span>🎮 <strong>Yukarı / W:</strong> Güçlü Gaz</span>
+        <span>🎮 <strong>Yukarı / W:</strong> Gaz</span>
         <span><strong>Aşağı / S:</strong> Fren</span>
         <span><strong>Sol / Sağ (A / D):</strong> Yumuşak Denge & Takla</span>
         <span><strong>Boşluk (Space):</strong> Hızlı Devam</span>
       </div>
-      <span class="text-amber-400/90 font-bold hidden sm:inline">1920x1080p Geniş Açılı Dağ Fiziği</span>
+      <span class="text-amber-400/90 font-bold hidden sm:inline">Düz Runway & Hidrolik Sönümleme</span>
     </div>
 
   </div>
 
   <script>
-    // --- SYNTHESIZED 2-STROKE DIRT BIKE AUDIO ENGINE ---
+    // --- AUDIO ENGINE ---
     class MotorAudio {
       constructor() {
         this.ctx = null;
@@ -157,7 +157,7 @@
         this.filter.type = 'lowpass';
         this.filter.frequency.setValueAtTime(550, this.ctx.currentTime);
 
-        this.gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+        this.gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
 
         this.osc.connect(this.filter);
         this.subOsc.connect(this.filter);
@@ -172,15 +172,15 @@
         if (!this.enabled || !this.ctx) return;
         if (this.ctx.state === 'suspended') this.ctx.resume();
 
-        const basePitch = 50;
-        const throttleBoost = throttle ? 110 : 0;
-        const speedBoost = Math.min(220, Math.abs(speed) * 14);
+        const basePitch = 48;
+        const throttleBoost = throttle ? 95 : 0;
+        const speedBoost = Math.min(180, Math.abs(speed) * 11);
         const targetFreq = basePitch + throttleBoost + speedBoost;
 
         const now = this.ctx.currentTime;
-        this.osc.frequency.setTargetAtTime(targetFreq, now, 0.06);
-        this.subOsc.frequency.setTargetAtTime(targetFreq * 0.5, now, 0.06);
-        this.filter.frequency.setTargetAtTime(400 + targetFreq * 4.5, now, 0.06);
+        this.osc.frequency.setTargetAtTime(targetFreq, now, 0.08);
+        this.subOsc.frequency.setTargetAtTime(targetFreq * 0.5, now, 0.08);
+        this.filter.frequency.setTargetAtTime(400 + targetFreq * 4.0, now, 0.08);
       }
 
       playCrash() {
@@ -190,8 +190,8 @@
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'square';
-          osc.frequency.setValueAtTime(150, now);
-          osc.frequency.exponentialRampToValueAtTime(35, now + 0.35);
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.exponentialRampToValueAtTime(30, now + 0.35);
 
           gain.gain.setValueAtTime(0.25, now);
           gain.gain.exponentialRampToValueAtTime(0.01, now + 0.38);
@@ -243,7 +243,6 @@
     const checkText = document.getElementById('checkText');
     const viewportContainer = document.getElementById('viewportContainer');
 
-    // 1920x1080 constant resolution
     const NATIVE_W = 1920;
     const NATIVE_H = 1080;
     canvas.width = NATIVE_W;
@@ -252,7 +251,6 @@
     let bestRecord = parseInt(localStorage.getItem('moto_dag_record') || '0', 10);
     recordVal.textContent = bestRecord + ' m';
 
-    // Inputs
     const keys = { up: false, down: false, left: false, right: false };
 
     window.addEventListener('keydown', (e) => {
@@ -293,7 +291,7 @@
     respawnCheckBtn.addEventListener('click', () => respawnAtCheckpoint());
     soundToggle.addEventListener('click', () => {
       audio.enabled = !audio.enabled;
-      if (audio.gain) audio.gain.gain.value = audio.enabled ? 0.05 : 0.0;
+      if (audio.gain) audio.gain.gain.value = audio.enabled ? 0.04 : 0.0;
       soundToggle.textContent = audio.enabled ? '🔊' : '🔇';
     });
 
@@ -305,24 +303,31 @@
       }
     });
 
-    // --- PROCEDURAL EXPANSIVE MOUNTAIN TERRAIN (1080p Tuned) ---
+    // --- SMOOTH & FLAT START RUNWAY TERRAIN ---
     function getTerrainHeight(worldX) {
-      if (worldX < 250) return 720; // Smooth launching runway
+      const baseY = 720;
+      // Completely flat runway for the first 800 pixels!
+      if (worldX < 800) return baseY;
 
-      // Natural mountain elevation profile (Smooth rideable waves)
-      const h1 = Math.sin(worldX * 0.0018) * 160;
-      const h2 = Math.sin(worldX * 0.0045) * 80;
-      const h3 = Math.sin(worldX * 0.012) * 25;
+      // Smooth Hermite blend factor [0, 1] between 800 and 1500
+      const blend = Math.min(1.0, (worldX - 800) / 700);
+      const t = blend * blend * (3 - 2 * blend); // smoothstep transition
 
-      // Jumps and Launch Ramps (every 650m)
+      // Gentle rolling waves (soft slopes, no sudden cliffs)
+      const wave1 = Math.sin((worldX - 800) * 0.0015) * 110;
+      const wave2 = Math.sin((worldX - 800) * 0.004) * 35;
+
+      // Gentle jump ramps after 1800m
       let ramp = 0;
-      const rampCycle = (worldX + 200) % 750;
-      if (rampCycle > 420 && rampCycle < 580) {
-        const t = (rampCycle - 420) / 160;
-        ramp = Math.sin(t * Math.PI) * 95;
+      if (worldX > 1800) {
+        const rampCycle = (worldX - 1800) % 900;
+        if (rampCycle > 500 && rampCycle < 680) {
+          const rt = (rampCycle - 500) / 180;
+          ramp = Math.sin(rt * Math.PI) * 70;
+        }
       }
 
-      return 710 - (h1 + h2 + h3 - ramp);
+      return baseY - (wave1 + wave2 - ramp) * t;
     }
 
     function getTerrainSlope(worldX) {
@@ -332,27 +337,26 @@
       return Math.atan2(y2 - y1, delta * 2);
     }
 
-    // --- GAME STATE & PHYSICS OBJECT ---
+    // --- GAME STATE & PHYSICS ---
     let state = 'PLAYING';
     let cameraX = 0;
     let cameraY = 0;
     let particles = [];
     let cumulativeRotation = 0;
     let previousAngle = 0;
-    let lastCheckpointX = 150;
-    let checkpoints = [300, 750, 1400, 2200, 3100, 4200, 5500];
+    let lastCheckpointX = 180;
+    let checkpoints = [600, 1400, 2300, 3300, 4500, 5800];
     let passedCheckpoints = new Set();
 
-    // 1080p Scaled Motorcycle Model
     const bike = {
       x: 180,
-      y: 650,
+      y: 690,
       vx: 0,
       vy: 0,
       angle: 0,
       angularVelocity: 0,
-      wheelBase: 65,      // Scaled for 1080p
-      wheelRadius: 24,    // Scaled for 1080p
+      wheelBase: 65,
+      wheelRadius: 24,
       rearGrounded: false,
       frontGrounded: false,
       wheelRotation: 0
@@ -360,7 +364,7 @@
 
     function resetFullGame() {
       bike.x = 180;
-      bike.y = 650;
+      bike.y = 690;
       bike.vx = 0;
       bike.vy = 0;
       bike.angle = 0;
@@ -377,8 +381,8 @@
 
     function respawnAtCheckpoint() {
       bike.x = lastCheckpointX;
-      bike.y = getTerrainHeight(lastCheckpointX) - 60;
-      bike.vx = 2.0; // Gentle forward start
+      bike.y = getTerrainHeight(lastCheckpointX) - 40;
+      bike.vx = 2.0;
       bike.vy = 0;
       bike.angle = getTerrainSlope(lastCheckpointX);
       bike.angularVelocity = 0;
@@ -430,7 +434,7 @@
     }
 
     function showCheckpoint(dist) {
-      checkText.textContent = `🚩 KONTROL NOKTASI GEÇİLDİ: ${dist} m!`;
+      checkText.textContent = `🚩 KONTROL NOKTASI: ${dist} m!`;
       checkToast.style.opacity = '1';
       checkToast.style.transform = 'translate(-50%, 0) scale(1)';
       audio.playBonus();
@@ -440,24 +444,25 @@
       }, 1600);
     }
 
-    // --- HIGH PERFORMANCE PHYSICS ENGINE (1080p Optimized & Smoothed) ---
+    // --- REFINED, SOFTENED PHYSICS (GENTLE GRAVITY & HYDRAULIC SUSPENSION) ---
     function updatePhysics() {
       if (state !== 'PLAYING') return;
 
-      const gravity = 0.44;
+      // 1. GENTLE ARCADE GRAVITY (Yumuşatılmış Yerçekimi)
+      // Was 0.44 (too heavy), now 0.22 (smooth and floaty arcade feel!)
+      const gravity = 0.22;
       bike.vy += gravity;
 
-      // 1. SOFTENED & SMOOTHED LEAN CONTROLS (Hassasiyeti Dengelendi)
-      // Instead of violent sudden rotation, we apply progressive smooth angular torque
-      const smoothLeanTorque = 0.0034;
+      // 2. SOFT LEAN / TILT (Hassasiyeti Dengeli)
+      const smoothLeanTorque = 0.0028;
       if (keys.left) {
-        bike.angularVelocity -= smoothLeanTorque; // Lean back / Wheelie
+        bike.angularVelocity -= smoothLeanTorque;
       }
       if (keys.right) {
-        bike.angularVelocity += smoothLeanTorque; // Lean forward / Stoppie
+        bike.angularVelocity += smoothLeanTorque;
       }
 
-      // 2. Wheel positions relative to bike chassis
+      // 3. Wheel positions relative to chassis
       const cosA = Math.cos(bike.angle);
       const sinA = Math.sin(bike.angle);
 
@@ -473,71 +478,72 @@
       bike.rearGrounded = rwy + bike.wheelRadius >= groundRW;
       bike.frontGrounded = fwy + bike.wheelRadius >= groundFW;
 
-      // 3. SUSPENSION & DRIVE TRACTION (Tırmanışı Güçlendirildi)
-      const springK = 0.32;
-
-      // Rear Wheel on Ground
+      // 4. HYDRAULIC DAMPER (AŞIRI ZIPLAMAYI TAMAMEN ENGELLEYEN SÖNÜMLEME)
+      // Instead of an undamped trampoline spring, we absorb downward velocity on impact!
       if (bike.rearGrounded) {
         const penetration = (rwy + bike.wheelRadius) - groundRW;
-        bike.vy -= penetration * springK;
-        bike.angularVelocity += penetration * 0.0018;
+        bike.y -= penetration * 0.55; // Smooth position correction
 
-        // POWERFUL THROTTLE DRIVE (Gaz ve Tırmanış Gücü)
+        // Shock Absorber: absorb 70% of downward impact so it doesn't bounce!
+        if (bike.vy > 0) {
+          bike.vy *= 0.25;
+        }
+
+        // Traction & Throttle (Gaz ve İlerleme)
         if (keys.up) {
           const slope = getTerrainSlope(rwx);
-          const driveForce = 1.15; // Powerful, responsive drive!
+          const driveForce = 1.05;
           bike.vx += Math.cos(slope) * driveForce;
           bike.vy += Math.sin(slope) * driveForce;
 
-          // Dirt particles from spinning off-road tire
-          if (Math.random() < 0.7) {
+          if (Math.random() < 0.6) {
             particles.push({
               x: rwx,
               y: rwy + bike.wheelRadius,
-              vx: -bike.vx * 0.4 - (Math.random() * 4 + 2),
-              vy: -Math.random() * 4 - 1,
-              size: 3 + Math.random() * 4,
+              vx: -bike.vx * 0.3 - (Math.random() * 3 + 1),
+              vy: -Math.random() * 3 - 0.5,
+              size: 3 + Math.random() * 3,
               color: '#d97706',
-              life: 1.0
+              life: 0.9
             });
           }
         }
       }
 
-      // Front Wheel on Ground
       if (bike.frontGrounded) {
         const penetration = (fwy + bike.wheelRadius) - groundFW;
-        bike.vy -= penetration * springK;
-        bike.angularVelocity -= penetration * 0.0018;
+        bike.y -= penetration * 0.55;
+        if (bike.vy > 0) {
+          bike.vy *= 0.25;
+        }
       }
 
-      // 4. NATURAL GROUND STABILIZATION (Yerdeyken Kolay Denge)
-      // When both wheels touch the ground, gently align the bike with terrain to prevent accidental instant flips
+      // 5. NATURAL GROUND ALIGNMENT (Yerdeyken Yumuşak Denge)
       if (bike.rearGrounded && bike.frontGrounded && !keys.left && !keys.right) {
         const targetAngle = getTerrainSlope(bike.x);
         const angleDiff = targetAngle - bike.angle;
-        bike.angularVelocity += angleDiff * 0.06;
+        bike.angularVelocity += angleDiff * 0.08;
       }
 
-      // 5. BRAKE & REVERSE
+      // 6. BRAKE
       if (keys.down) {
-        bike.vx *= 0.91; // Strong responsive brake
+        bike.vx *= 0.92;
       }
 
-      // Air Drag & Angular Damping (Smooth Feel)
-      bike.vx *= 0.995;
-      bike.angularVelocity *= 0.935; // Gentle rotational damping
+      // Smooth Air Drag & Rotational Damping
+      bike.vx *= 0.996;
+      bike.angularVelocity *= 0.94;
 
-      // Apply Motion
+      // Update positions
       bike.x += bike.vx;
       bike.y += bike.vy;
       bike.angle += bike.angularVelocity;
-      bike.wheelRotation += bike.vx * 0.09;
+      bike.wheelRotation += bike.vx * 0.08;
 
-      // Update Audio Engine RPM
+      // Audio RPM
       audio.updateRPM(keys.up, bike.vx);
 
-      // 6. FLIP DETECTION (360 Takla)
+      // 7. FLIP DETECTION
       let diff = bike.angle - previousAngle;
       cumulativeRotation += diff;
       previousAngle = bike.angle;
@@ -554,7 +560,7 @@
         cumulativeRotation = 0;
       }
 
-      // 7. CHECKPOINT SYSTEM (Her 600-800m'de bir kayıt)
+      // 8. CHECKPOINTS
       for (let cp of checkpoints) {
         if (!passedCheckpoints.has(cp) && bike.x >= cp * 10) {
           passedCheckpoints.add(cp);
@@ -563,14 +569,13 @@
         }
       }
 
-      // 8. CRASH DETECTION (Sadece sert kafa çarpmalarında kaza)
-      // Head position in 1080p
+      // 9. CRASH DETECTION (Sadece sert kafa çarpmalarında kaza)
       const headX = bike.x - sinA * 54;
       const headY = bike.y - cosA * 54;
       const groundAtHead = getTerrainHeight(headX);
 
-      // Only crash if head is deeply inverted and hitting the ground
-      if (headY >= groundAtHead - 4) {
+      // Inverted contact test
+      if (headY >= groundAtHead - 2 && Math.abs(cosA) < 0.4) {
         triggerCrash();
       }
 
@@ -578,42 +583,41 @@
         triggerCrash();
       }
 
-      // Update HUD
+      // HUD
       const meters = Math.max(0, Math.floor(bike.x / 10));
       distVal.textContent = meters + ' m';
       speedVal.textContent = Math.max(0, Math.floor(Math.abs(bike.vx) * 6.5)) + ' km/s';
     }
 
-    // --- 1080p RENDERING ENGINE ---
+    // --- 1080p RENDERING ---
     function render() {
       ctx.clearRect(0, 0, NATIVE_W, NATIVE_H);
 
-      // Widescreen Smooth Camera: Bike positioned at 35% from left, 55% from top
-      const targetCamX = bike.x - NATIVE_W * 0.35;
-      const targetCamY = bike.y - NATIVE_H * 0.55;
+      // Wide lead camera (bike at 32% from left, 60% from top)
+      const targetCamX = bike.x - NATIVE_W * 0.32;
+      const targetCamY = bike.y - NATIVE_H * 0.60;
       cameraX += (targetCamX - cameraX) * 0.12;
       cameraY += (targetCamY - cameraY) * 0.12;
 
-      // 1. Dynamic Parallax Alpine Sky & Mountain Layers
+      // 1. Mountain Backdrop
       drawBackground(cameraX, cameraY);
 
-      // 2. Mountain Ground & Checkpoint Flags
+      // 2. Terrain & Checkpoints
       ctx.save();
       ctx.translate(-cameraX, -cameraY);
       drawTerrain(cameraX);
       drawCheckpoints();
 
-      // 3. Dirt Particles
+      // 3. Particles
       drawParticles();
 
-      // 4. Detailed 1080p Trial Bike & Animated Rider
+      // 4. Motorcycle & Rider
       drawBikeAndRider();
 
       ctx.restore();
     }
 
     function drawBackground(camX, camY) {
-      // Golden Alpine Sunset Sky Gradient
       const sky = ctx.createLinearGradient(0, 0, 0, NATIVE_H);
       sky.addColorStop(0, '#0c0a09');
       sky.addColorStop(0.4, '#292524');
@@ -634,7 +638,7 @@
       ctx.closePath();
       ctx.fill();
 
-      // Mid Mountain Ridges (Parallax 0.22)
+      // Mid Ridges (Parallax 0.2)
       ctx.fillStyle = 'rgba(28, 25, 23, 0.95)';
       ctx.beginPath();
       ctx.moveTo(0, NATIVE_H);
@@ -663,7 +667,6 @@
       ctx.lineTo(startX, 2200);
       ctx.closePath();
 
-      // Deep Rocky Earth Gradient
       const earthGrad = ctx.createLinearGradient(0, 500, 0, 1600);
       earthGrad.addColorStop(0, '#44403c');
       earthGrad.addColorStop(0.2, '#292524');
@@ -671,7 +674,7 @@
       ctx.fillStyle = earthGrad;
       ctx.fill();
 
-      // Golden Orange Dirt Trail Surface
+      // Asphalt/Dirt Starting Runway Highlight
       ctx.beginPath();
       ctx.moveTo(startX, getTerrainHeight(startX));
       for (let x = startX; x <= endX; x += step) {
@@ -681,7 +684,6 @@
       ctx.lineWidth = 7.0;
       ctx.stroke();
 
-      // Accent Edge
       ctx.strokeStyle = '#78350f';
       ctx.lineWidth = 3.0;
       ctx.stroke();
@@ -693,7 +695,6 @@
         const cpy = getTerrainHeight(cpx);
         const passed = passedCheckpoints.has(cp);
 
-        // Flag Pole
         ctx.strokeStyle = '#e7e5e4';
         ctx.lineWidth = 4;
         ctx.beginPath();
@@ -701,7 +702,6 @@
         ctx.lineTo(cpx, cpy - 70);
         ctx.stroke();
 
-        // Flag Banner
         ctx.fillStyle = passed ? '#10b981' : '#f59e0b';
         ctx.beginPath();
         ctx.moveTo(cpx, cpy - 70);
@@ -717,11 +717,11 @@
       ctx.translate(bike.x, bike.y);
       ctx.rotate(bike.angle);
 
-      // Rear and Front Wheels (1080p Scale)
+      // Wheels
       drawWheel(-bike.wheelBase, 12);
       drawWheel(bike.wheelBase, 12);
 
-      // Swingarm (Arka Maşa)
+      // Swingarm
       ctx.strokeStyle = '#a8a29e';
       ctx.lineWidth = 7;
       ctx.beginPath();
@@ -729,7 +729,7 @@
       ctx.lineTo(-8, 0);
       ctx.stroke();
 
-      // Front Fork (Ön Amortisör)
+      // Front Fork
       ctx.strokeStyle = '#f59e0b';
       ctx.lineWidth = 6;
       ctx.beginPath();
@@ -737,7 +737,7 @@
       ctx.lineTo(26, -26);
       ctx.stroke();
 
-      // Bike Frame (Kırmızı Yarış Şasisi)
+      // Frame
       ctx.fillStyle = '#dc2626';
       ctx.beginPath();
       ctx.moveTo(-30, -4);
@@ -747,7 +747,7 @@
       ctx.closePath();
       ctx.fill();
 
-      // Engine Block & Exhaust
+      // Engine
       ctx.fillStyle = '#1c1917';
       ctx.fillRect(-16, -6, 26, 18);
       ctx.strokeStyle = '#a8a29e';
@@ -755,7 +755,7 @@
       ctx.beginPath();
       ctx.moveTo(-4, 6);
       ctx.lineTo(-24, 4);
-      ctx.lineTo(-44, -4); // Chrome exhaust pipe
+      ctx.lineTo(-44, -4);
       ctx.stroke();
 
       // Handlebars
@@ -766,20 +766,18 @@
       ctx.lineTo(28, -42);
       ctx.stroke();
 
-      // --- RIDER (Kasklı Sürücü 1080p) ---
+      // Rider
       let leanOffset = 0;
       if (keys.left) leanOffset = -12;
       if (keys.right) leanOffset = 12;
 
-      // Legs
       ctx.strokeStyle = '#1e3a8a';
       ctx.lineWidth = 9;
       ctx.beginPath();
       ctx.moveTo(-22 + leanOffset, -26);
-      ctx.lineTo(0, 0); // Foot peg
+      ctx.lineTo(0, 0);
       ctx.stroke();
 
-      // Torso
       ctx.strokeStyle = '#ea580c';
       ctx.lineWidth = 13;
       ctx.beginPath();
@@ -787,7 +785,6 @@
       ctx.lineTo(0 + leanOffset * 1.3, -52);
       ctx.stroke();
 
-      // Arms to Handlebar
       ctx.strokeStyle = '#ea580c';
       ctx.lineWidth = 6;
       ctx.beginPath();
@@ -795,13 +792,11 @@
       ctx.lineTo(28, -42);
       ctx.stroke();
 
-      // Helmet (Kask)
       ctx.fillStyle = '#ffffff';
       ctx.beginPath();
       ctx.arc(5 + leanOffset * 1.4, -64, 13, 0, Math.PI * 2);
       ctx.fill();
 
-      // Tinted Visor
       ctx.fillStyle = '#0f172a';
       ctx.fillRect(9 + leanOffset * 1.4, -68, 10, 8);
 
@@ -813,22 +808,19 @@
       ctx.translate(wx, wy);
       ctx.rotate(bike.wheelRotation);
 
-      // Knobby Off-road Tire
       ctx.strokeStyle = '#1c1917';
       ctx.lineWidth = 9;
       ctx.beginPath();
       ctx.arc(0, 0, bike.wheelRadius, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Gold Rim
       ctx.strokeStyle = '#f59e0b';
       ctx.lineWidth = 3.5;
       ctx.beginPath();
       ctx.arc(0, 0, bike.wheelRadius - 6, 0, Math.PI * 2);
       ctx.stroke();
 
-      // Spokes
-      ctx.strokeStyle = '#78716c';
+      ctx.strokeStyle = '#78350f';
       ctx.lineWidth = 2.0;
       for (let s = 0; s < 6; s++) {
         const ang = (s / 6) * Math.PI * 2;
@@ -862,7 +854,6 @@
       }
     }
 
-    // Main Game Loop
     function loop() {
       updatePhysics();
       render();
