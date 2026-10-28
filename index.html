@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Dağ Motorcusu: Tuzaklar, Benzin & Nitro</title>
+  <title>Dağ Motorcusu: Sonsuz Parkur, Dengeli Tuzaklar & Bol Benzin</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap');
@@ -17,7 +17,7 @@
 </head>
 <body class="bg-stone-950 text-stone-100 flex flex-col items-center justify-center min-h-screen p-1 sm:p-3 overflow-hidden select-none">
 
-  <!-- 1920x1080 Cinema Container -->
+  <!-- 1920x1080 Container (16:9 Cinema Aspect Ratio) -->
   <div class="relative w-full max-w-[1280px] 2xl:max-w-[1600px] bg-stone-900 border-2 border-amber-500/50 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
     
     <!-- Top HUD Bar -->
@@ -27,35 +27,35 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-sm font-black tracking-wider text-amber-400 uppercase leading-none">MOTO TRIAL EXTREME</h1>
-            <span class="px-2 py-0.5 rounded bg-red-600/30 text-red-400 font-extrabold text-[10px] border border-red-500/30">TUZAKLAR & NİTRO</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-extrabold text-[10px] border border-emerald-500/30">BOL BENZİN & DENGELİ TUZAKLAR</span>
           </div>
-          <p class="text-[11px] text-stone-400 font-semibold leading-tight">Denge, Benzin ve Engeller</p>
+          <p class="text-[11px] text-stone-400 font-semibold leading-tight">Sonsuz Dağ Parkuru & Akıcı Ritim</p>
         </div>
       </div>
 
       <!-- Gauges & Counters -->
       <div class="flex items-center space-x-3 text-xs">
-        <!-- Fuel Gauge -->
-        <div class="bg-black/60 px-3 py-1 rounded-full border border-stone-700 flex items-center gap-2 min-w-[140px]">
+        <!-- Fuel Gauge (Expanded) -->
+        <div class="bg-black/60 px-3.5 py-1.5 rounded-full border border-stone-700 flex items-center gap-2 min-w-[160px]">
           <span class="text-amber-400 font-black">⛽ BENZİN:</span>
-          <div class="w-16 h-2.5 bg-stone-800 rounded-full overflow-hidden border border-stone-600">
-            <div id="fuelBar" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-100" style="width: 100%;"></div>
+          <div class="w-20 h-2.5 bg-stone-800 rounded-full overflow-hidden border border-stone-600">
+            <div id="fuelBar" class="h-full bg-emerald-500 transition-all duration-100" style="width: 100%;"></div>
           </div>
         </div>
 
         <!-- Nitro Gauge -->
-        <div class="bg-black/60 px-3 py-1 rounded-full border border-stone-700 flex items-center gap-2 min-w-[130px]">
+        <div class="bg-black/60 px-3.5 py-1.5 rounded-full border border-stone-700 flex items-center gap-2 min-w-[130px]">
           <span class="text-cyan-400 font-black">🚀 NİTRO:</span>
           <div class="w-16 h-2.5 bg-stone-800 rounded-full overflow-hidden border border-stone-600">
             <div id="nitroBar" class="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-100" style="width: 100%;"></div>
           </div>
         </div>
 
-        <div class="bg-black/60 px-3 py-1 rounded-full border border-stone-700 flex items-center gap-2">
+        <div class="bg-black/60 px-3.5 py-1.5 rounded-full border border-stone-700 flex items-center gap-2">
           <span class="text-stone-400 font-bold">MESAFE:</span>
           <span id="distVal" class="text-amber-400 font-black text-sm">0 m</span>
         </div>
-        <div class="bg-black/60 px-3 py-1 rounded-full border border-stone-700 flex items-center gap-2">
+        <div class="bg-black/60 px-3.5 py-1.5 rounded-full border border-stone-700 flex items-center gap-2">
           <span class="text-stone-400 font-bold">HIZ:</span>
           <span id="speedVal" class="text-emerald-400 font-black text-sm">0 km/s</span>
         </div>
@@ -69,7 +69,7 @@
       </div>
     </div>
 
-    <!-- 16:9 Canvas Viewport -->
+    <!-- 16:9 Canvas Viewport (1920x1080 Native) -->
     <div id="viewportContainer" class="relative w-full aspect-video bg-stone-950 overflow-hidden">
       <canvas id="gameCanvas" width="1920" height="1080" class="w-full h-full block"></canvas>
 
@@ -127,20 +127,20 @@
     <!-- Skills Guide Bottom Bar -->
     <div class="w-full bg-stone-950 px-5 py-2.5 border-t border-stone-800 text-xs text-stone-400 flex flex-wrap justify-between items-center gap-2">
       <div class="flex items-center gap-4 flex-wrap">
-        <span>🎮 <strong>Yukarı / W:</strong> Gaz <em>(Ön kaldırır! D tuşuyla dengele)</em></span>
-        <span><strong>Aşağı / S:</strong> Disk Freni</span>
+        <span>🎮 <strong>Yukarı / W:</strong> Gaz <em>(Ön kalkarsa D ile dengele)</em></span>
+        <span><strong>Aşağı / S:</strong> Yumuşak Disk Freni</span>
         <span><strong>Sol / Sağ (A / D):</strong> Denge & Havada Takla</span>
         <span><strong class="text-cyan-400">Shift / X:</strong> 🚀 Nitro Boost</span>
         <span><strong class="text-purple-400">E / C:</strong> 🐰 Bunny-Hop Zıpla</span>
         <span><strong>Boşluk:</strong> Hızlı Devam</span>
       </div>
-      <span class="text-amber-400 font-bold hidden sm:inline">⛽ Benzin Topla & Tuzaklardan Kaç!</span>
+      <span class="text-emerald-400 font-bold hidden sm:inline">⛽ Bol Benzin & Dengeli Sonsuz Parkur</span>
     </div>
 
   </div>
 
   <script>
-    // --- SYNTHESIZED AUDIO ENGINE (Engine, Nitro, Fuel & Explosion) ---
+    // --- AUDIO ENGINE ---
     class TrialAudio {
       constructor() {
         this.ctx = null;
@@ -181,7 +181,7 @@
         if (this.ctx.state === 'suspended') this.ctx.resume();
 
         const basePitch = 48;
-        const throttleBoost = throttle ? 100 : 0;
+        const throttleBoost = throttle ? 95 : 0;
         const speedBoost = Math.min(180, Math.abs(speed) * 11);
         const nitroBoost = nitro ? 140 : 0;
         const targetFreq = basePitch + throttleBoost + speedBoost + nitroBoost;
@@ -282,8 +282,7 @@
       down: false,
       left: false,
       right: false,
-      nitro: false,
-      jump: false
+      nitro: false
     };
 
     window.addEventListener('keydown', (e) => {
@@ -338,45 +337,29 @@
       else document.exitFullscreen().catch(() => {});
     });
 
-    // --- TERRAIN GENERATION (With Chasm, Vertical Steps & Ramps) ---
+    // --- PROCEDURAL ENDLESS MOUNTAIN TERRAIN WITH JUMPS ---
     function getTerrainHeight(worldX) {
       const baseY = 720;
-      if (worldX < 600) return baseY; // Flat runway
+      if (worldX < 800) return baseY; // 800px flat warm-up runway
 
-      // Natural undulations
-      const blend = Math.min(1.0, (worldX - 600) / 600);
+      const blend = Math.min(1.0, (worldX - 800) / 600);
       const t = blend * blend * (3 - 2 * blend);
 
-      const wave1 = Math.sin((worldX - 600) * 0.0016) * 120;
-      const wave2 = Math.sin((worldX - 600) * 0.0042) * 50;
+      // Smooth rolling waves
+      const wave1 = Math.sin((worldX - 800) * 0.0014) * 115;
+      const wave2 = Math.sin((worldX - 800) * 0.0038) * 45;
 
-      // Obstacle Ramps & Steps
-      let features = 0;
-
-      // Feature 1: First Big Ramp Jump (worldX ~ 1250)
-      if (worldX > 1150 && worldX < 1350) {
-        features += Math.sin((worldX - 1150) / 200 * Math.PI) * 90;
-      }
-
-      // Feature 2: Steep Hill Climb (worldX ~ 2100 - 2400)
-      if (worldX > 2000 && worldX < 2500) {
-        features += Math.sin((worldX - 2000) / 500 * Math.PI) * 160;
-      }
-
-      // Feature 3: Mega Canyon Jump (worldX ~ 3200)
-      if (worldX > 3000 && worldX < 3300) {
-        features += Math.sin((worldX - 3000) / 300 * Math.PI) * 110;
-      }
-
-      // Feature 4: Roller coaster jumps (worldX > 3800)
-      if (worldX > 3800) {
-        const cycle = (worldX - 3800) % 900;
-        if (cycle > 500 && cycle < 720) {
-          features += Math.sin((cycle - 500) / 220 * Math.PI) * 85;
+      // Endless periodic jump ramps (every 900m)
+      let ramps = 0;
+      if (worldX > 1400) {
+        const cycle = (worldX - 1400) % 900;
+        if (cycle > 500 && cycle < 700) {
+          const rt = (cycle - 500) / 200;
+          ramps = Math.sin(rt * Math.PI) * 80;
         }
       }
 
-      return baseY - (wave1 + wave2 + features) * t;
+      return baseY - (wave1 + wave2 + ramps) * t;
     }
 
     function getTerrainSlope(worldX) {
@@ -386,29 +369,42 @@
       return Math.atan2(y2 - y1, delta * 2);
     }
 
-    // --- TRAPS, FUEL PICKUPS & CHECKPOINTS ---
-    // Spikes, TNT barrels, and Fuel Cans placed along the track
-    const traps = [
-      { type: 'SPIKES', x: 1380, width: 80, desc: 'Sivri Kaya Tuzağı' },
-      { type: 'TNT', x: 1950, radius: 24, desc: 'Patlayan TNT Varili' },
-      { type: 'SPIKES', x: 2600, width: 90, desc: 'Uçurum Kazıkları' },
-      { type: 'TNT', x: 3350, radius: 24, desc: 'TNT Tuzağı' },
-      { type: 'SPIKES', x: 4100, width: 100, desc: 'Dikenli Çukur' }
-    ];
+    // --- PROCEDURAL ENDLESS TRAPS, FUEL PICKUPS & CHECKPOINTS ---
+    // Instead of clumped hardcoded traps only at the start, we generate them rhythmically forever!
+    const CYCLE_LENGTH = 1200; // Every 120 meters
 
-    const fuelPickups = [
-      { x: 950, collected: false },
-      { x: 1750, collected: false },
-      { x: 2850, collected: false },
-      { x: 3700, collected: false },
-      { x: 4700, collected: false }
-    ];
+    function getTrapAt(index) {
+      if (index < 1) return null; // First 1200m is completely clean!
+      const baseX = index * CYCLE_LENGTH + 600;
+      const isSpike = index % 2 === 1;
+      return {
+        id: index,
+        x: baseX,
+        type: isSpike ? 'SPIKES' : 'TNT',
+        width: 60,
+        radius: 22
+      };
+    }
 
-    const checkpoints = [800, 1600, 2500, 3500, 4600, 6000];
+    function getFuelPickupAt(index) {
+      // Generous fuel cans every cycle
+      const baseX = index * CYCLE_LENGTH + 300;
+      return {
+        id: index,
+        x: baseX
+      };
+    }
+
+    function getCheckpointAt(index) {
+      // Checkpoint every 2 cycles (every 2400 units = 240m)
+      return (index + 1) * (CYCLE_LENGTH * 2);
+    }
+
+    let collectedFuelIds = new Set();
     let passedCheckpoints = new Set();
     let lastCheckpointX = 180;
 
-    // --- GAME STATE & REAL PHYSICS MOTORCYCLE ---
+    // --- GAME STATE ---
     let state = 'PLAYING';
     let cameraX = 0;
     let cameraY = 0;
@@ -416,6 +412,7 @@
     let cumulativeRotation = 0;
     let previousAngle = 0;
 
+    // FUEL SYSTEM: Much more generous!
     let fuel = 100.0;
     let nitro = 100.0;
 
@@ -446,9 +443,8 @@
 
     function triggerBunnyHop() {
       if (state !== 'PLAYING') return;
-      // Only hop when touching ground
       if (bike.rearGrounded || bike.frontGrounded) {
-        bike.vy = -7.6;
+        bike.vy = -7.4;
         bike.vx += Math.cos(bike.angle) * 2.2;
         audio.playHop();
         showToast('🐰 BUNNY HOP! YÜKSEK ATLAYIŞ', 'bg-purple-500');
@@ -479,7 +475,7 @@
       fuel = 100.0;
       nitro = 100.0;
       passedCheckpoints.clear();
-      fuelPickups.forEach(p => p.collected = false);
+      collectedFuelIds.clear();
       particles = [];
       cumulativeRotation = 0;
       previousAngle = 0;
@@ -494,7 +490,7 @@
       bike.vy = 0;
       bike.angle = getTerrainSlope(lastCheckpointX);
       bike.angularVelocity = 0;
-      fuel = 100.0; // Refill fuel on respawn
+      fuel = 100.0; // Full refill on respawn
       particles = [];
       cumulativeRotation = 0;
       previousAngle = bike.angle;
@@ -531,7 +527,7 @@
       if (reason === 'FUEL') {
         crashIcon.textContent = '⛽';
         crashTitle.textContent = 'BENZİN BİTTİ!';
-        crashDesc.textContent = 'Yolda benzin bidonlarını toplamayı veya bayraklara hızlı ulaşmayı unutma!';
+        crashDesc.textContent = 'Yolda benzin bidonlarını toplamayı veya bayraklara ulaşmayı unutma!';
       } else if (reason === 'TNT') {
         crashIcon.textContent = '💣';
         crashTitle.textContent = 'TNT PATLADI!';
@@ -549,41 +545,40 @@
       crashOverlay.classList.remove('hidden');
     }
 
-    // --- REVOLUTIONARY REALISTIC TRIAL PHYSICS ENGINE ---
+    // --- REFINED PHYSICS (LONG LASTING FUEL & EQUILIBRIUM TRACTION) ---
     function updatePhysics() {
       if (state !== 'PLAYING') return;
 
-      // 1. FUEL CONSUMPTION (Benzin Tüketimi)
+      // 1. GENEROUS FUEL SYSTEM (Benzin Çok Daha Uzun Gider)
+      // Was 0.08 per frame (only 20s!), now 0.024 per frame (~75s of full throttle!)
       if (keys.up || keys.nitro) {
-        fuel -= keys.nitro ? 0.16 : 0.08;
+        fuel -= keys.nitro ? 0.05 : 0.024;
       } else {
-        fuel -= 0.015; // Idle
+        fuel -= 0.003; // Negligible idle drain
       }
 
       if (fuel <= 0) {
         fuel = 0;
-        bike.vx *= 0.98;
+        bike.vx *= 0.985;
         if (Math.abs(bike.vx) < 0.2) {
           triggerCrash('FUEL');
           return;
         }
       }
 
-      // Update Fuel HUD Bar Color (Green -> Amber -> Red)
       fuelBar.style.width = Math.max(0, fuel) + '%';
       if (fuel > 50) fuelBar.className = 'h-full bg-emerald-500';
       else if (fuel > 20) fuelBar.className = 'h-full bg-amber-500';
       else fuelBar.className = 'h-full bg-red-500 animate-pulse';
 
-      // 2. NITRO BOOST LOGIC
+      // 2. NITRO BOOST
       let isNitroActive = false;
       if (keys.nitro && nitro > 0 && fuel > 0) {
         isNitroActive = true;
-        nitro -= 0.65;
+        nitro -= 0.55;
         bike.vx += Math.cos(bike.angle) * 0.95;
         bike.vy += Math.sin(bike.angle) * 0.95;
 
-        // Cyan / Blue flame rocket particles
         for (let i = 0; i < 2; i++) {
           particles.push({
             x: bike.x - Math.cos(bike.angle) * 45,
@@ -596,7 +591,6 @@
           });
         }
       } else {
-        // Slow passive nitro recharge
         nitro = Math.min(100, nitro + 0.08);
       }
       nitroBar.style.width = Math.max(0, nitro) + '%';
@@ -605,7 +599,7 @@
       const gravity = 0.22;
       bike.vy += gravity;
 
-      // 4. REALISTIC MANUAL LEAN CONTROLS (Yön Tuşları ile Denge)
+      // 4. MANUAL LEAN TORQUE
       const leanTorque = 0.0032;
       if (keys.left) {
         bike.angularVelocity -= leanTorque; // Lean back / Wheelie
@@ -614,7 +608,7 @@
         bike.angularVelocity += leanTorque; // Lean forward / Stoppie
       }
 
-      // 5. WHEEL POSITIONS RELATIVE TO CHASSIS
+      // 5. WHEEL POSITIONS
       const cosA = Math.cos(bike.angle);
       const sinA = Math.sin(bike.angle);
 
@@ -630,14 +624,11 @@
       bike.rearGrounded = rwy + bike.wheelRadius >= groundRW;
       bike.frontGrounded = fwy + bike.wheelRadius >= groundFW;
 
-      // 6. REALISTIC WHEELIE TORQUE REACTION (TEK TUŞLA GİTMEYİ ENGELLEYEN FİZİK)
-      // When accelerating, the drive wheel pushes the bike forward AND causes reactive torque that lifts the front wheel!
-      // If the player doesn't lean forward with RIGHT / D, the bike WILL loop out and crash!
+      // 6. WHEELIE TORQUE REACTION (Dengeli Ön Kaldırma)
       if (bike.rearGrounded && keys.up && fuel > 0) {
         const penetration = (rwy + bike.wheelRadius) - groundRW;
         bike.y -= penetration * 0.55;
 
-        // Hydraulic damp
         if (bike.vy > 0) bike.vy *= 0.25;
 
         const slope = getTerrainSlope(rwx);
@@ -645,8 +636,8 @@
         bike.vx += Math.cos(slope) * driveForce;
         bike.vy += Math.sin(slope) * driveForce;
 
-        // REACTION TORQUE: Lifts front wheel (Wheelie pitch effect!)
-        bike.angularVelocity -= 0.0022;
+        // Moderate wheelie lift: Player must lean forward to keep front down!
+        bike.angularVelocity -= 0.0020;
 
         if (Math.random() < 0.6) {
           particles.push({
@@ -667,41 +658,39 @@
         if (bike.vy > 0) bike.vy *= 0.25;
       }
 
-      // 7. REALISTIC DISK BRAKE (Aşırı Güçlü Olmayan, Doğal Fren)
-      // Brake decelerates smoothly and pitches nose down (weight transfer!)
+      // 7. REALISTIC DISK BRAKE
       if (keys.down) {
-        bike.vx *= 0.965; // Smooth realistic braking (was 0.91)
+        bike.vx *= 0.965;
         if (bike.frontGrounded) {
-          bike.angularVelocity += 0.0016; // Front brake stoppie torque
+          bike.angularVelocity += 0.0015;
         }
       }
 
-      // Air resistance & Angular damping
+      // Air Drag
       bike.vx *= 0.996;
       bike.angularVelocity *= 0.94;
 
-      // Apply Kinematics
+      // Kinematics
       bike.x += bike.vx;
       bike.y += bike.vy;
       bike.angle += bike.angularVelocity;
       bike.wheelRotation += bike.vx * 0.08;
 
-      // Sound update
       audio.updateRPM(keys.up, bike.vx, isNitroActive);
 
-      // 8. FLIP DETECTION (360 Takla Bonusu & Nitro Doldurma)
+      // 8. FLIP DETECTION
       let diff = bike.angle - previousAngle;
       cumulativeRotation += diff;
       previousAngle = bike.angle;
 
       if (cumulativeRotation >= Math.PI * 2 * 0.88) {
         cumulativeRotation = 0;
-        nitro = Math.min(100, nitro + 40);
+        nitro = Math.min(100, nitro + 45);
         showToast('🔥 ÖN TAKLA BONUSU! +NİTRO DOLDU', 'bg-gradient-to-r from-amber-500 to-orange-500');
         audio.playFuelPickup();
       } else if (cumulativeRotation <= -Math.PI * 2 * 0.88) {
         cumulativeRotation = 0;
-        nitro = Math.min(100, nitro + 40);
+        nitro = Math.min(100, nitro + 45);
         showToast('⚡ ARKA TAKLA BONUSU! +NİTRO DOLDU', 'bg-gradient-to-r from-cyan-500 to-blue-500');
         audio.playFuelPickup();
       }
@@ -710,37 +699,42 @@
         cumulativeRotation = 0;
       }
 
-      // 9. CHECKPOINT & REFILL
-      for (let cp of checkpoints) {
-        if (!passedCheckpoints.has(cp) && bike.x >= cp * 10) {
-          passedCheckpoints.add(cp);
+      // 9. PROCEDURAL CHECKPOINTS & FULL FUEL REFILL
+      const currentCycle = Math.floor(bike.x / CYCLE_LENGTH);
+      for (let c = Math.max(0, currentCycle - 1); c <= currentCycle + 2; c++) {
+        const cpX = getCheckpointAt(c);
+        if (!passedCheckpoints.has(cpX) && bike.x >= cpX) {
+          passedCheckpoints.add(cpX);
           lastCheckpointX = bike.x;
-          fuel = 100.0; // Refill fuel to 100% at checkpoint!
+          fuel = 100.0; // FULL TANK!
           nitro = 100.0;
-          showToast(`🚩 KONTROL NOKTASI & BENZİN DOLDU: ${cp} m!`, 'bg-emerald-500');
+          showToast(`🚩 KONTROL NOKTASI & BENZİN DOLDU: ${Math.floor(cpX / 10)} m!`, 'bg-emerald-500');
           audio.playFuelPickup();
         }
       }
 
-      // 10. FUEL PICKUPS (Yol Üstü Benzin Bidonları)
-      for (let item of fuelPickups) {
-        if (!item.collected) {
-          const itemY = getTerrainHeight(item.x) - 35;
-          const dist = Math.hypot(bike.x - item.x, bike.y - itemY);
-          if (dist < 45) {
-            item.collected = true;
-            fuel = Math.min(100, fuel + 45.0);
+      // 10. PROCEDURAL FUEL PICKUPS (+60% Fuel)
+      for (let c = Math.max(0, currentCycle - 1); c <= currentCycle + 2; c++) {
+        const p = getFuelPickupAt(c);
+        if (!collectedFuelIds.has(p.id)) {
+          const itemY = getTerrainHeight(p.x) - 35;
+          const dist = Math.hypot(bike.x - p.x, bike.y - itemY);
+          if (dist < 50) {
+            collectedFuelIds.add(p.id);
+            fuel = Math.min(100, fuel + 60.0);
             audio.playFuelPickup();
-            showToast('⛽ BENZİN ALINDI! +45%', 'bg-amber-400');
+            showToast('⛽ BENZİN ALINDI! +60%', 'bg-amber-400');
           }
         }
       }
 
-      // 11. TRAPS DETECTION (Spikes & Explosive TNT Barrels)
-      for (let trap of traps) {
+      // 11. PROCEDURAL TRAPS DETECTION (Spikes & Explosive TNT Barrels)
+      for (let c = Math.max(0, currentCycle - 1); c <= currentCycle + 2; c++) {
+        const trap = getTrapAt(c);
+        if (!trap) continue;
+
         const trapY = getTerrainHeight(trap.x);
         if (trap.type === 'SPIKES') {
-          // Spike pit zone
           if (bike.x >= trap.x - trap.width / 2 && bike.x <= trap.x + trap.width / 2) {
             if (bike.y >= trapY - 18) {
               triggerCrash('SPIKES');
@@ -762,7 +756,6 @@
       const headY = bike.y - cosA * 54;
       const groundAtHead = getTerrainHeight(headX);
 
-      // Inverted contact test
       if (headY >= groundAtHead - 4 && Math.abs(cosA) < 0.35) {
         triggerCrash('CRASH');
       }
@@ -793,9 +786,9 @@
       ctx.save();
       ctx.translate(-cameraX, -cameraY);
       drawTerrain(cameraX);
-      drawTraps();
-      drawFuelPickups();
-      drawCheckpoints();
+      drawProceduralTraps(cameraX);
+      drawProceduralFuel(cameraX);
+      drawProceduralCheckpoints(cameraX);
 
       // 3. Particles
       drawParticles();
@@ -878,15 +871,20 @@
       ctx.stroke();
     }
 
-    // Draw Traps (Spikes & Explosive TNT Barrels)
-    function drawTraps() {
-      for (let trap of traps) {
+    // Draw Endless Procedural Traps
+    function drawProceduralTraps(camX) {
+      const minCycle = Math.max(1, Math.floor((camX - 200) / CYCLE_LENGTH));
+      const maxCycle = Math.floor((camX + NATIVE_W + 200) / CYCLE_LENGTH);
+
+      for (let c = minCycle; c <= maxCycle; c++) {
+        const trap = getTrapAt(c);
+        if (!trap) continue;
+
         const ty = getTerrainHeight(trap.x);
 
         if (trap.type === 'SPIKES') {
-          // Steel/Red triangular danger spikes
           const leftX = trap.x - trap.width / 2;
-          const numSpikes = 6;
+          const numSpikes = 5;
           const spikeW = trap.width / numSpikes;
 
           for (let s = 0; s < numSpikes; s++) {
@@ -904,15 +902,14 @@
             ctx.stroke();
           }
 
-          // Danger Warning Sign next to spikes
+          // Warning Sign
           ctx.fillStyle = '#eab308';
-          ctx.fillRect(leftX - 25, ty - 50, 20, 20);
+          ctx.fillRect(leftX - 35, ty - 50, 22, 22);
           ctx.fillStyle = '#000000';
-          ctx.font = 'bold 14px sans-serif';
-          ctx.fillText('⚠️', leftX - 23, ty - 34);
+          ctx.font = 'bold 15px sans-serif';
+          ctx.fillText('⚠️', leftX - 33, ty - 33);
 
         } else if (trap.type === 'TNT') {
-          // Glowing Red Explosive Barrel
           const bx = trap.x;
           const by = ty - 22;
 
@@ -925,12 +922,11 @@
           ctx.lineWidth = 2.5;
           ctx.stroke();
 
-          // TNT Label
           ctx.fillStyle = '#ffffff';
           ctx.font = 'black 12px sans-serif';
           ctx.fillText('TNT', bx - 13, by + 4);
 
-          // Burning Sparking Fuse on top
+          // Burning Sparking Fuse
           ctx.strokeStyle = '#a8a29e';
           ctx.lineWidth = 2;
           ctx.beginPath();
@@ -946,25 +942,30 @@
       }
     }
 
-    // Draw Fuel Pickups (Floating Yellow/Amber Jerry Cans)
-    function drawFuelPickups() {
-      for (let item of fuelPickups) {
-        if (item.collected) continue;
-        const fy = getTerrainHeight(item.x) - 40 + Math.sin(Date.now() * 0.005) * 6;
+    // Draw Endless Procedural Fuel Pickups
+    function drawProceduralFuel(camX) {
+      const minCycle = Math.max(0, Math.floor((camX - 200) / CYCLE_LENGTH));
+      const maxCycle = Math.floor((camX + NATIVE_W + 200) / CYCLE_LENGTH);
+
+      for (let c = minCycle; c <= maxCycle; c++) {
+        const item = getFuelPickupAt(c);
+        if (collectedFuelIds.has(item.id)) continue;
+
+        const fy = getTerrainHeight(item.x) - 40 + Math.sin(Date.now() * 0.005 + c) * 6;
 
         ctx.save();
         ctx.translate(item.x, fy);
 
-        // Halo glow
+        // Golden glow
         const glow = ctx.createRadialGradient(0, 0, 5, 0, 0, 32);
-        glow.addColorStop(0, 'rgba(245, 158, 11, 0.6)');
+        glow.addColorStop(0, 'rgba(245, 158, 11, 0.65)');
         glow.addColorStop(1, 'rgba(245, 158, 11, 0)');
         ctx.fillStyle = glow;
         ctx.beginPath();
         ctx.arc(0, 0, 32, 0, Math.PI * 2);
         ctx.fill();
 
-        // Jerry can body
+        // Jerry can
         ctx.fillStyle = '#f59e0b';
         ctx.beginPath();
         ctx.roundRect(-16, -18, 32, 36, 6);
@@ -974,11 +975,9 @@
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        // Handle
         ctx.fillStyle = '#b45309';
         ctx.fillRect(-10, -25, 20, 7);
 
-        // Cap & ⛽ icon
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 14px sans-serif';
         ctx.fillText('⛽', -7, 6);
@@ -987,11 +986,15 @@
       }
     }
 
-    function drawCheckpoints() {
-      for (let cp of checkpoints) {
-        const cpx = cp * 10;
+    // Draw Endless Procedural Checkpoints
+    function drawProceduralCheckpoints(camX) {
+      const minCycle = Math.max(0, Math.floor((camX - 400) / (CYCLE_LENGTH * 2)));
+      const maxCycle = Math.floor((camX + NATIVE_W + 400) / (CYCLE_LENGTH * 2));
+
+      for (let c = minCycle; c <= maxCycle; c++) {
+        const cpx = getCheckpointAt(c);
         const cpy = getTerrainHeight(cpx);
-        const passed = passedCheckpoints.has(cp);
+        const passed = passedCheckpoints.has(cpx);
 
         ctx.strokeStyle = '#e7e5e4';
         ctx.lineWidth = 4;
@@ -1009,7 +1012,6 @@
         ctx.closePath();
         ctx.fill();
 
-        // Gas Pump Station Label
         ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 12px sans-serif';
         ctx.fillText('⛽ FULL', cpx - 18, cpy - 82);
