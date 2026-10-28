@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Dağ Motorcusu: 1080p Moto Trial</title>
+  <title>Dağ Motorcusu: Tuzaklar, Benzin & Nitro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap');
@@ -17,7 +17,7 @@
 </head>
 <body class="bg-stone-950 text-stone-100 flex flex-col items-center justify-center min-h-screen p-1 sm:p-3 overflow-hidden select-none">
 
-  <!-- 1920x1080 Container (16:9 Cinema Aspect Ratio) -->
+  <!-- 1920x1080 Cinema Container -->
   <div class="relative w-full max-w-[1280px] 2xl:max-w-[1600px] bg-stone-900 border-2 border-amber-500/50 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
     
     <!-- Top HUD Bar -->
@@ -26,61 +26,67 @@
         <span class="text-2xl">🏍️</span>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-sm font-black tracking-wider text-amber-400 uppercase leading-none">MOTO DAĞ TRİAL</h1>
-            <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-extrabold text-[10px] border border-amber-500/30">1080p HD</span>
+            <h1 class="text-sm font-black tracking-wider text-amber-400 uppercase leading-none">MOTO TRIAL EXTREME</h1>
+            <span class="px-2 py-0.5 rounded bg-red-600/30 text-red-400 font-extrabold text-[10px] border border-red-500/30">TUZAKLAR & NİTRO</span>
           </div>
-          <p class="text-[11px] text-stone-400 font-semibold leading-tight">Yumuşak Süspansiyon & Düz Başlangıç Pisti</p>
+          <p class="text-[11px] text-stone-400 font-semibold leading-tight">Denge, Benzin ve Engeller</p>
         </div>
       </div>
 
-      <!-- Live Counters -->
+      <!-- Gauges & Counters -->
       <div class="flex items-center space-x-3 text-xs">
-        <div class="bg-black/60 px-3.5 py-1.5 rounded-full border border-stone-700 flex items-center gap-2">
+        <!-- Fuel Gauge -->
+        <div class="bg-black/60 px-3 py-1 rounded-full border border-stone-700 flex items-center gap-2 min-w-[140px]">
+          <span class="text-amber-400 font-black">⛽ BENZİN:</span>
+          <div class="w-16 h-2.5 bg-stone-800 rounded-full overflow-hidden border border-stone-600">
+            <div id="fuelBar" class="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-100" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <!-- Nitro Gauge -->
+        <div class="bg-black/60 px-3 py-1 rounded-full border border-stone-700 flex items-center gap-2 min-w-[130px]">
+          <span class="text-cyan-400 font-black">🚀 NİTRO:</span>
+          <div class="w-16 h-2.5 bg-stone-800 rounded-full overflow-hidden border border-stone-600">
+            <div id="nitroBar" class="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-100" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div class="bg-black/60 px-3 py-1 rounded-full border border-stone-700 flex items-center gap-2">
           <span class="text-stone-400 font-bold">MESAFE:</span>
           <span id="distVal" class="text-amber-400 font-black text-sm">0 m</span>
         </div>
-        <div class="bg-black/60 px-3.5 py-1.5 rounded-full border border-stone-700 flex items-center gap-2">
+        <div class="bg-black/60 px-3 py-1 rounded-full border border-stone-700 flex items-center gap-2">
           <span class="text-stone-400 font-bold">HIZ:</span>
           <span id="speedVal" class="text-emerald-400 font-black text-sm">0 km/s</span>
         </div>
-        <div class="bg-black/60 px-3.5 py-1.5 rounded-full border border-stone-700 flex items-center gap-2">
-          <span class="text-stone-400 font-bold">REKOR:</span>
-          <span id="recordVal" class="text-amber-300 font-black text-sm">0 m</span>
-        </div>
-        <button id="fullscreenBtn" class="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 border border-stone-600 text-xs text-stone-200 transition" title="Tam Ekran">
+
+        <button id="fullscreenBtn" class="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 border border-stone-600 text-xs text-stone-200" title="Tam Ekran">
           ⛶
         </button>
-        <button id="soundToggle" class="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 border border-stone-600 text-xs text-stone-200 transition">
+        <button id="soundToggle" class="p-1.5 rounded-lg bg-stone-800 hover:bg-stone-700 border border-stone-600 text-xs text-stone-200">
           🔊
         </button>
       </div>
     </div>
 
-    <!-- 16:9 Canvas Viewport (Native 1920x1080) -->
+    <!-- 16:9 Canvas Viewport -->
     <div id="viewportContainer" class="relative w-full aspect-video bg-stone-950 overflow-hidden">
       <canvas id="gameCanvas" width="1920" height="1080" class="w-full h-full block"></canvas>
 
-      <!-- Flip / Air Bonus Banner -->
-      <div id="bonusToast" class="absolute top-8 left-1/2 -translate-x-1/2 pointer-events-none opacity-0 transition-all duration-300 scale-90 z-20 text-center">
-        <span id="bonusText" class="px-6 py-2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-stone-950 font-black text-sm sm:text-base tracking-wider shadow-2xl border-2 border-white/60">
+      <!-- Bonus & Trap Alert Toast -->
+      <div id="toastAlert" class="absolute top-8 left-1/2 -translate-x-1/2 pointer-events-none opacity-0 transition-all duration-300 scale-90 z-20 text-center">
+        <span id="toastText" class="px-6 py-2 rounded-full bg-amber-500 text-stone-950 font-black text-sm sm:text-base tracking-wider shadow-2xl border-2 border-white/60">
           🔥 HARİKA TAKLA! +500
         </span>
       </div>
 
-      <!-- Checkpoint Banner -->
-      <div id="checkToast" class="absolute top-20 left-1/2 -translate-x-1/2 pointer-events-none opacity-0 transition-all duration-300 scale-90 z-20 text-center">
-        <span id="checkText" class="px-5 py-1.5 rounded-full bg-emerald-500/95 text-stone-950 font-black text-xs sm:text-sm tracking-wider shadow-xl border border-white/50">
-          🚩 KONTROL NOKTASI GEÇİLDİ!
-        </span>
-      </div>
-
-      <!-- Crash Overlay -->
-      <div id="crashOverlay" class="absolute inset-0 bg-black/80 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-20 hidden">
-        <div class="w-16 h-16 rounded-full bg-red-600/20 border-2 border-red-500 flex items-center justify-center text-3xl mb-3 animate-bounce">
+      <!-- Crash / Out of Fuel Overlay -->
+      <div id="crashOverlay" class="absolute inset-0 bg-black/85 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-20 hidden">
+        <div id="crashIcon" class="w-16 h-16 rounded-full bg-red-600/20 border-2 border-red-500 flex items-center justify-center text-3xl mb-3 animate-bounce">
           💥
         </div>
-        <h2 class="text-3xl font-black text-red-500 mb-1">DENGEYİ KAYBETTİN!</h2>
-        <p class="text-sm text-stone-300 max-w-sm mb-5 font-medium">Hemen son kontrol noktasından veya baştan devam edebilirsin.</p>
+        <h2 id="crashTitle" class="text-3xl font-black text-red-500 mb-1">DENGEYİ KAYBETTİN!</h2>
+        <p id="crashDesc" class="text-sm text-stone-300 max-w-sm mb-5 font-medium">Ön kaldırdın veya tuzağa çarptın. Gaz verirken öne yaslanmayı unutma!</p>
         
         <div class="flex gap-4 mb-6">
           <div class="bg-stone-900 border border-stone-700 rounded-xl px-5 py-3 text-center min-w-[120px]">
@@ -110,28 +116,32 @@
           <button id="btnRight" class="w-14 h-14 rounded-2xl bg-black/70 border border-stone-600 text-xl flex items-center justify-center active:bg-amber-600 shadow-lg">▶</button>
         </div>
         <div class="flex gap-2 pointer-events-auto">
+          <button id="btnJump" class="w-14 h-14 rounded-2xl bg-purple-950/80 border border-purple-600 text-xs font-black flex items-center justify-center active:bg-purple-600 shadow-lg">ZIPLA</button>
+          <button id="btnNitro" class="w-14 h-14 rounded-2xl bg-cyan-950/80 border border-cyan-600 text-xs font-black flex items-center justify-center active:bg-cyan-600 shadow-lg">NİTRO</button>
           <button id="btnBrake" class="w-14 h-14 rounded-2xl bg-red-950/80 border border-red-700 text-xs font-black flex items-center justify-center active:bg-red-600 shadow-lg">FREN</button>
           <button id="btnGas" class="w-14 h-14 rounded-2xl bg-emerald-950/80 border border-emerald-600 text-xs font-black flex items-center justify-center active:bg-emerald-600 shadow-lg">GAZ</button>
         </div>
       </div>
     </div>
 
-    <!-- Bottom Controls Guide -->
+    <!-- Skills Guide Bottom Bar -->
     <div class="w-full bg-stone-950 px-5 py-2.5 border-t border-stone-800 text-xs text-stone-400 flex flex-wrap justify-between items-center gap-2">
-      <div class="flex items-center gap-4">
-        <span>🎮 <strong>Yukarı / W:</strong> Gaz</span>
-        <span><strong>Aşağı / S:</strong> Fren</span>
-        <span><strong>Sol / Sağ (A / D):</strong> Yumuşak Denge & Takla</span>
-        <span><strong>Boşluk (Space):</strong> Hızlı Devam</span>
+      <div class="flex items-center gap-4 flex-wrap">
+        <span>🎮 <strong>Yukarı / W:</strong> Gaz <em>(Ön kaldırır! D tuşuyla dengele)</em></span>
+        <span><strong>Aşağı / S:</strong> Disk Freni</span>
+        <span><strong>Sol / Sağ (A / D):</strong> Denge & Havada Takla</span>
+        <span><strong class="text-cyan-400">Shift / X:</strong> 🚀 Nitro Boost</span>
+        <span><strong class="text-purple-400">E / C:</strong> 🐰 Bunny-Hop Zıpla</span>
+        <span><strong>Boşluk:</strong> Hızlı Devam</span>
       </div>
-      <span class="text-amber-400/90 font-bold hidden sm:inline">Düz Runway & Hidrolik Sönümleme</span>
+      <span class="text-amber-400 font-bold hidden sm:inline">⛽ Benzin Topla & Tuzaklardan Kaç!</span>
     </div>
 
   </div>
 
   <script>
-    // --- AUDIO ENGINE ---
-    class MotorAudio {
+    // --- SYNTHESIZED AUDIO ENGINE (Engine, Nitro, Fuel & Explosion) ---
+    class TrialAudio {
       constructor() {
         this.ctx = null;
         this.osc = null;
@@ -153,10 +163,8 @@
 
         this.osc.type = 'sawtooth';
         this.subOsc.type = 'triangle';
-
         this.filter.type = 'lowpass';
         this.filter.frequency.setValueAtTime(550, this.ctx.currentTime);
-
         this.gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
 
         this.osc.connect(this.filter);
@@ -168,79 +176,98 @@
         this.subOsc.start();
       }
 
-      updateRPM(throttle, speed) {
+      updateRPM(throttle, speed, nitro) {
         if (!this.enabled || !this.ctx) return;
         if (this.ctx.state === 'suspended') this.ctx.resume();
 
         const basePitch = 48;
-        const throttleBoost = throttle ? 95 : 0;
+        const throttleBoost = throttle ? 100 : 0;
         const speedBoost = Math.min(180, Math.abs(speed) * 11);
-        const targetFreq = basePitch + throttleBoost + speedBoost;
+        const nitroBoost = nitro ? 140 : 0;
+        const targetFreq = basePitch + throttleBoost + speedBoost + nitroBoost;
 
         const now = this.ctx.currentTime;
-        this.osc.frequency.setTargetAtTime(targetFreq, now, 0.08);
-        this.subOsc.frequency.setTargetAtTime(targetFreq * 0.5, now, 0.08);
-        this.filter.frequency.setTargetAtTime(400 + targetFreq * 4.0, now, 0.08);
+        this.osc.frequency.setTargetAtTime(targetFreq, now, 0.05);
+        this.subOsc.frequency.setTargetAtTime(targetFreq * 0.5, now, 0.05);
+        this.filter.frequency.setTargetAtTime(400 + targetFreq * 4.5, now, 0.05);
       }
 
-      playCrash() {
+      playFuelPickup() {
+        if (!this.enabled || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          [440, 554.37, 659.25, 880].forEach((freq, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.frequency.setValueAtTime(freq, now + i * 0.05);
+            gain.gain.setValueAtTime(0.12, now + i * 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.2);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + i * 0.05);
+            osc.stop(now + i * 0.05 + 0.22);
+          });
+        } catch(e) {}
+      }
+
+      playHop() {
+        if (!this.enabled || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(580, now + 0.15);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.18);
+        } catch(e) {}
+      }
+
+      playExplosion() {
         if (!this.enabled || !this.ctx) return;
         try {
           const now = this.ctx.currentTime;
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'square';
-          osc.frequency.setValueAtTime(140, now);
-          osc.frequency.exponentialRampToValueAtTime(30, now + 0.35);
-
-          gain.gain.setValueAtTime(0.25, now);
-          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.38);
-
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.exponentialRampToValueAtTime(25, now + 0.45);
+          gain.gain.setValueAtTime(0.35, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start(now);
-          osc.stop(now + 0.4);
-        } catch(e) {}
-      }
-
-      playBonus() {
-        if (!this.enabled || !this.ctx) return;
-        try {
-          const now = this.ctx.currentTime;
-          [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.frequency.setValueAtTime(freq, now + i * 0.07);
-            gain.gain.setValueAtTime(0.12, now + i * 0.07);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.07 + 0.25);
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            osc.start(now + i * 0.07);
-            osc.stop(now + i * 0.07 + 0.3);
-          });
+          osc.stop(now + 0.55);
         } catch(e) {}
       }
     }
 
-    const audio = new MotorAudio();
+    const audio = new TrialAudio();
 
-    // --- GAME ENGINE & SETUP ---
+    // --- GAME ENGINE SETUP ---
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const distVal = document.getElementById('distVal');
     const speedVal = document.getElementById('speedVal');
-    const recordVal = document.getElementById('recordVal');
+    const fuelBar = document.getElementById('fuelBar');
+    const nitroBar = document.getElementById('nitroBar');
     const crashOverlay = document.getElementById('crashOverlay');
+    const crashTitle = document.getElementById('crashTitle');
+    const crashDesc = document.getElementById('crashDesc');
+    const crashIcon = document.getElementById('crashIcon');
     const finalDist = document.getElementById('finalDist');
     const finalRecord = document.getElementById('finalRecord');
     const restartBtn = document.getElementById('restartBtn');
     const respawnCheckBtn = document.getElementById('respawnCheckBtn');
     const soundToggle = document.getElementById('soundToggle');
     const fullscreenBtn = document.getElementById('fullscreenBtn');
-    const bonusToast = document.getElementById('bonusToast');
-    const bonusText = document.getElementById('bonusText');
-    const checkToast = document.getElementById('checkToast');
-    const checkText = document.getElementById('checkText');
+    const toastAlert = document.getElementById('toastAlert');
+    const toastText = document.getElementById('toastText');
     const viewportContainer = document.getElementById('viewportContainer');
 
     const NATIVE_W = 1920;
@@ -249,9 +276,15 @@
     canvas.height = NATIVE_H;
 
     let bestRecord = parseInt(localStorage.getItem('moto_dag_record') || '0', 10);
-    recordVal.textContent = bestRecord + ' m';
 
-    const keys = { up: false, down: false, left: false, right: false };
+    const keys = {
+      up: false,
+      down: false,
+      left: false,
+      right: false,
+      nitro: false,
+      jump: false
+    };
 
     window.addEventListener('keydown', (e) => {
       audio.init();
@@ -259,13 +292,14 @@
       if (['ArrowDown', 'KeyS'].includes(e.code)) { e.preventDefault(); keys.down = true; }
       if (['ArrowLeft', 'KeyA'].includes(e.code)) { e.preventDefault(); keys.left = true; }
       if (['ArrowRight', 'KeyD'].includes(e.code)) { e.preventDefault(); keys.right = true; }
+      if (['ShiftLeft', 'ShiftRight', 'KeyX'].includes(e.code)) { e.preventDefault(); keys.nitro = true; }
+      if (['KeyE', 'KeyC'].includes(e.code)) { e.preventDefault(); triggerBunnyHop(); }
       if (e.code === 'Space') {
         e.preventDefault();
         if (state === 'CRASHED') respawnAtCheckpoint();
+        else triggerBunnyHop();
       }
-      if (e.code === 'KeyR') {
-        resetFullGame();
-      }
+      if (e.code === 'KeyR') resetFullGame();
     });
 
     window.addEventListener('keyup', (e) => {
@@ -273,8 +307,10 @@
       if (['ArrowDown', 'KeyS'].includes(e.code)) keys.down = false;
       if (['ArrowLeft', 'KeyA'].includes(e.code)) keys.left = false;
       if (['ArrowRight', 'KeyD'].includes(e.code)) keys.right = false;
+      if (['ShiftLeft', 'ShiftRight', 'KeyX'].includes(e.code)) keys.nitro = false;
     });
 
+    // Touch setup
     const setupTouch = (btn, keyName) => {
       const el = document.getElementById(btn);
       if (!el) return;
@@ -286,6 +322,8 @@
     setupTouch('btnBrake', 'down');
     setupTouch('btnLeft', 'left');
     setupTouch('btnRight', 'right');
+    setupTouch('btnNitro', 'nitro');
+    document.getElementById('btnJump')?.addEventListener('pointerdown', (e) => { e.preventDefault(); triggerBunnyHop(); });
 
     restartBtn.addEventListener('click', () => resetFullGame());
     respawnCheckBtn.addEventListener('click', () => respawnAtCheckpoint());
@@ -296,38 +334,49 @@
     });
 
     fullscreenBtn.addEventListener('click', () => {
-      if (!document.fullscreenElement) {
-        viewportContainer.requestFullscreen().catch(() => {});
-      } else {
-        document.exitFullscreen().catch(() => {});
-      }
+      if (!document.fullscreenElement) viewportContainer.requestFullscreen().catch(() => {});
+      else document.exitFullscreen().catch(() => {});
     });
 
-    // --- SMOOTH & FLAT START RUNWAY TERRAIN ---
+    // --- TERRAIN GENERATION (With Chasm, Vertical Steps & Ramps) ---
     function getTerrainHeight(worldX) {
       const baseY = 720;
-      // Completely flat runway for the first 800 pixels!
-      if (worldX < 800) return baseY;
+      if (worldX < 600) return baseY; // Flat runway
 
-      // Smooth Hermite blend factor [0, 1] between 800 and 1500
-      const blend = Math.min(1.0, (worldX - 800) / 700);
-      const t = blend * blend * (3 - 2 * blend); // smoothstep transition
+      // Natural undulations
+      const blend = Math.min(1.0, (worldX - 600) / 600);
+      const t = blend * blend * (3 - 2 * blend);
 
-      // Gentle rolling waves (soft slopes, no sudden cliffs)
-      const wave1 = Math.sin((worldX - 800) * 0.0015) * 110;
-      const wave2 = Math.sin((worldX - 800) * 0.004) * 35;
+      const wave1 = Math.sin((worldX - 600) * 0.0016) * 120;
+      const wave2 = Math.sin((worldX - 600) * 0.0042) * 50;
 
-      // Gentle jump ramps after 1800m
-      let ramp = 0;
-      if (worldX > 1800) {
-        const rampCycle = (worldX - 1800) % 900;
-        if (rampCycle > 500 && rampCycle < 680) {
-          const rt = (rampCycle - 500) / 180;
-          ramp = Math.sin(rt * Math.PI) * 70;
+      // Obstacle Ramps & Steps
+      let features = 0;
+
+      // Feature 1: First Big Ramp Jump (worldX ~ 1250)
+      if (worldX > 1150 && worldX < 1350) {
+        features += Math.sin((worldX - 1150) / 200 * Math.PI) * 90;
+      }
+
+      // Feature 2: Steep Hill Climb (worldX ~ 2100 - 2400)
+      if (worldX > 2000 && worldX < 2500) {
+        features += Math.sin((worldX - 2000) / 500 * Math.PI) * 160;
+      }
+
+      // Feature 3: Mega Canyon Jump (worldX ~ 3200)
+      if (worldX > 3000 && worldX < 3300) {
+        features += Math.sin((worldX - 3000) / 300 * Math.PI) * 110;
+      }
+
+      // Feature 4: Roller coaster jumps (worldX > 3800)
+      if (worldX > 3800) {
+        const cycle = (worldX - 3800) % 900;
+        if (cycle > 500 && cycle < 720) {
+          features += Math.sin((cycle - 500) / 220 * Math.PI) * 85;
         }
       }
 
-      return baseY - (wave1 + wave2 - ramp) * t;
+      return baseY - (wave1 + wave2 + features) * t;
     }
 
     function getTerrainSlope(worldX) {
@@ -337,16 +386,38 @@
       return Math.atan2(y2 - y1, delta * 2);
     }
 
-    // --- GAME STATE & PHYSICS ---
+    // --- TRAPS, FUEL PICKUPS & CHECKPOINTS ---
+    // Spikes, TNT barrels, and Fuel Cans placed along the track
+    const traps = [
+      { type: 'SPIKES', x: 1380, width: 80, desc: 'Sivri Kaya Tuzağı' },
+      { type: 'TNT', x: 1950, radius: 24, desc: 'Patlayan TNT Varili' },
+      { type: 'SPIKES', x: 2600, width: 90, desc: 'Uçurum Kazıkları' },
+      { type: 'TNT', x: 3350, radius: 24, desc: 'TNT Tuzağı' },
+      { type: 'SPIKES', x: 4100, width: 100, desc: 'Dikenli Çukur' }
+    ];
+
+    const fuelPickups = [
+      { x: 950, collected: false },
+      { x: 1750, collected: false },
+      { x: 2850, collected: false },
+      { x: 3700, collected: false },
+      { x: 4700, collected: false }
+    ];
+
+    const checkpoints = [800, 1600, 2500, 3500, 4600, 6000];
+    let passedCheckpoints = new Set();
+    let lastCheckpointX = 180;
+
+    // --- GAME STATE & REAL PHYSICS MOTORCYCLE ---
     let state = 'PLAYING';
     let cameraX = 0;
     let cameraY = 0;
     let particles = [];
     let cumulativeRotation = 0;
     let previousAngle = 0;
-    let lastCheckpointX = 180;
-    let checkpoints = [600, 1400, 2300, 3300, 4500, 5800];
-    let passedCheckpoints = new Set();
+
+    let fuel = 100.0;
+    let nitro = 100.0;
 
     const bike = {
       x: 180,
@@ -362,6 +433,40 @@
       wheelRotation: 0
     };
 
+    function showToast(text, colorClass = 'bg-amber-500') {
+      toastText.textContent = text;
+      toastText.className = `px-6 py-2 rounded-full ${colorClass} text-stone-950 font-black text-sm sm:text-base tracking-wider shadow-2xl border-2 border-white/60`;
+      toastAlert.style.opacity = '1';
+      toastAlert.style.transform = 'translate(-50%, 0) scale(1)';
+      setTimeout(() => {
+        toastAlert.style.opacity = '0';
+        toastAlert.style.transform = 'translate(-50%, -10px) scale(0.9)';
+      }, 1600);
+    }
+
+    function triggerBunnyHop() {
+      if (state !== 'PLAYING') return;
+      // Only hop when touching ground
+      if (bike.rearGrounded || bike.frontGrounded) {
+        bike.vy = -7.6;
+        bike.vx += Math.cos(bike.angle) * 2.2;
+        audio.playHop();
+        showToast('🐰 BUNNY HOP! YÜKSEK ATLAYIŞ', 'bg-purple-500');
+
+        for (let i = 0; i < 8; i++) {
+          particles.push({
+            x: bike.x + (Math.random() - 0.5) * 30,
+            y: bike.y + 20,
+            vx: (Math.random() - 0.5) * 6,
+            vy: Math.random() * 3,
+            size: 3 + Math.random() * 3,
+            color: '#a855f7',
+            life: 0.8
+          });
+        }
+      }
+    }
+
     function resetFullGame() {
       bike.x = 180;
       bike.y = 690;
@@ -371,7 +476,10 @@
       bike.angularVelocity = 0;
       bike.wheelRotation = 0;
       lastCheckpointX = 180;
+      fuel = 100.0;
+      nitro = 100.0;
       passedCheckpoints.clear();
+      fuelPickups.forEach(p => p.collected = false);
       particles = [];
       cumulativeRotation = 0;
       previousAngle = 0;
@@ -386,6 +494,7 @@
       bike.vy = 0;
       bike.angle = getTerrainSlope(lastCheckpointX);
       bike.angularVelocity = 0;
+      fuel = 100.0; // Refill fuel on respawn
       particles = [];
       cumulativeRotation = 0;
       previousAngle = bike.angle;
@@ -393,19 +502,19 @@
       crashOverlay.classList.add('hidden');
     }
 
-    function triggerCrash() {
+    function triggerCrash(reason = 'CRASH') {
       if (state === 'CRASHED') return;
       state = 'CRASHED';
-      audio.playCrash();
+      audio.playExplosion();
 
-      for (let i = 0; i < 25; i++) {
+      for (let i = 0; i < 35; i++) {
         particles.push({
-          x: bike.x + (Math.random() - 0.5) * 50,
-          y: bike.y + (Math.random() - 0.5) * 50,
-          vx: (Math.random() - 0.5) * 12,
-          vy: -Math.random() * 8,
-          size: 4 + Math.random() * 6,
-          color: Math.random() > 0.5 ? '#f97316' : '#78716c',
+          x: bike.x + (Math.random() - 0.5) * 60,
+          y: bike.y + (Math.random() - 0.5) * 60,
+          vx: (Math.random() - 0.5) * 16,
+          vy: -Math.random() * 10,
+          size: 4 + Math.random() * 7,
+          color: Math.random() > 0.5 ? '#f97316' : '#ef4444',
           life: 1.0
         });
       }
@@ -414,55 +523,98 @@
       if (currentMeters > bestRecord) {
         bestRecord = currentMeters;
         localStorage.setItem('moto_dag_record', bestRecord.toString());
-        recordVal.textContent = bestRecord + ' m';
       }
 
       finalDist.textContent = currentMeters + ' m';
       finalRecord.textContent = bestRecord + ' m';
+
+      if (reason === 'FUEL') {
+        crashIcon.textContent = '⛽';
+        crashTitle.textContent = 'BENZİN BİTTİ!';
+        crashDesc.textContent = 'Yolda benzin bidonlarını toplamayı veya bayraklara hızlı ulaşmayı unutma!';
+      } else if (reason === 'TNT') {
+        crashIcon.textContent = '💣';
+        crashTitle.textContent = 'TNT PATLADI!';
+        crashDesc.textContent = 'Kırmızı varillerin üzerinden zıpla ya da çarpmadan geç!';
+      } else if (reason === 'SPIKES') {
+        crashIcon.textContent = '💀';
+        crashTitle.textContent = 'DİKENLİ TUZAK!';
+        crashDesc.textContent = 'Sivri kazıklara denk gelmemek için gazlayıp üzerinden uçmalısın!';
+      } else {
+        crashIcon.textContent = '💥';
+        crashTitle.textContent = 'DENGEYİ KAYBETTİN!';
+        crashDesc.textContent = 'Gaz verdiğinde ön kalkar! D tuşuna basarak öne yaslanıp dengele.';
+      }
+
       crashOverlay.classList.remove('hidden');
     }
 
-    function showBonus(text) {
-      bonusText.textContent = text;
-      bonusToast.style.opacity = '1';
-      bonusToast.style.transform = 'translate(-50%, 0) scale(1)';
-      audio.playBonus();
-      setTimeout(() => {
-        bonusToast.style.opacity = '0';
-        bonusToast.style.transform = 'translate(-50%, -10px) scale(0.9)';
-      }, 1600);
-    }
-
-    function showCheckpoint(dist) {
-      checkText.textContent = `🚩 KONTROL NOKTASI: ${dist} m!`;
-      checkToast.style.opacity = '1';
-      checkToast.style.transform = 'translate(-50%, 0) scale(1)';
-      audio.playBonus();
-      setTimeout(() => {
-        checkToast.style.opacity = '0';
-        checkToast.style.transform = 'translate(-50%, -10px) scale(0.9)';
-      }, 1600);
-    }
-
-    // --- REFINED, SOFTENED PHYSICS (GENTLE GRAVITY & HYDRAULIC SUSPENSION) ---
+    // --- REVOLUTIONARY REALISTIC TRIAL PHYSICS ENGINE ---
     function updatePhysics() {
       if (state !== 'PLAYING') return;
 
-      // 1. GENTLE ARCADE GRAVITY (Yumuşatılmış Yerçekimi)
-      // Was 0.44 (too heavy), now 0.22 (smooth and floaty arcade feel!)
+      // 1. FUEL CONSUMPTION (Benzin Tüketimi)
+      if (keys.up || keys.nitro) {
+        fuel -= keys.nitro ? 0.16 : 0.08;
+      } else {
+        fuel -= 0.015; // Idle
+      }
+
+      if (fuel <= 0) {
+        fuel = 0;
+        bike.vx *= 0.98;
+        if (Math.abs(bike.vx) < 0.2) {
+          triggerCrash('FUEL');
+          return;
+        }
+      }
+
+      // Update Fuel HUD Bar Color (Green -> Amber -> Red)
+      fuelBar.style.width = Math.max(0, fuel) + '%';
+      if (fuel > 50) fuelBar.className = 'h-full bg-emerald-500';
+      else if (fuel > 20) fuelBar.className = 'h-full bg-amber-500';
+      else fuelBar.className = 'h-full bg-red-500 animate-pulse';
+
+      // 2. NITRO BOOST LOGIC
+      let isNitroActive = false;
+      if (keys.nitro && nitro > 0 && fuel > 0) {
+        isNitroActive = true;
+        nitro -= 0.65;
+        bike.vx += Math.cos(bike.angle) * 0.95;
+        bike.vy += Math.sin(bike.angle) * 0.95;
+
+        // Cyan / Blue flame rocket particles
+        for (let i = 0; i < 2; i++) {
+          particles.push({
+            x: bike.x - Math.cos(bike.angle) * 45,
+            y: bike.y - Math.sin(bike.angle) * 45 + 5,
+            vx: -bike.vx * 0.5 + (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4,
+            size: 4 + Math.random() * 5,
+            color: Math.random() > 0.4 ? '#06b6d4' : '#3b82f6',
+            life: 0.7
+          });
+        }
+      } else {
+        // Slow passive nitro recharge
+        nitro = Math.min(100, nitro + 0.08);
+      }
+      nitroBar.style.width = Math.max(0, nitro) + '%';
+
+      // 3. GRAVITY & AIR DRAG
       const gravity = 0.22;
       bike.vy += gravity;
 
-      // 2. SOFT LEAN / TILT (Hassasiyeti Dengeli)
-      const smoothLeanTorque = 0.0028;
+      // 4. REALISTIC MANUAL LEAN CONTROLS (Yön Tuşları ile Denge)
+      const leanTorque = 0.0032;
       if (keys.left) {
-        bike.angularVelocity -= smoothLeanTorque;
+        bike.angularVelocity -= leanTorque; // Lean back / Wheelie
       }
       if (keys.right) {
-        bike.angularVelocity += smoothLeanTorque;
+        bike.angularVelocity += leanTorque; // Lean forward / Stoppie
       }
 
-      // 3. Wheel positions relative to chassis
+      // 5. WHEEL POSITIONS RELATIVE TO CHASSIS
       const cosA = Math.cos(bike.angle);
       const sinA = Math.sin(bike.angle);
 
@@ -478,134 +630,171 @@
       bike.rearGrounded = rwy + bike.wheelRadius >= groundRW;
       bike.frontGrounded = fwy + bike.wheelRadius >= groundFW;
 
-      // 4. HYDRAULIC DAMPER (AŞIRI ZIPLAMAYI TAMAMEN ENGELLEYEN SÖNÜMLEME)
-      // Instead of an undamped trampoline spring, we absorb downward velocity on impact!
-      if (bike.rearGrounded) {
+      // 6. REALISTIC WHEELIE TORQUE REACTION (TEK TUŞLA GİTMEYİ ENGELLEYEN FİZİK)
+      // When accelerating, the drive wheel pushes the bike forward AND causes reactive torque that lifts the front wheel!
+      // If the player doesn't lean forward with RIGHT / D, the bike WILL loop out and crash!
+      if (bike.rearGrounded && keys.up && fuel > 0) {
         const penetration = (rwy + bike.wheelRadius) - groundRW;
-        bike.y -= penetration * 0.55; // Smooth position correction
+        bike.y -= penetration * 0.55;
 
-        // Shock Absorber: absorb 70% of downward impact so it doesn't bounce!
-        if (bike.vy > 0) {
-          bike.vy *= 0.25;
-        }
+        // Hydraulic damp
+        if (bike.vy > 0) bike.vy *= 0.25;
 
-        // Traction & Throttle (Gaz ve İlerleme)
-        if (keys.up) {
-          const slope = getTerrainSlope(rwx);
-          const driveForce = 1.05;
-          bike.vx += Math.cos(slope) * driveForce;
-          bike.vy += Math.sin(slope) * driveForce;
+        const slope = getTerrainSlope(rwx);
+        const driveForce = 0.95;
+        bike.vx += Math.cos(slope) * driveForce;
+        bike.vy += Math.sin(slope) * driveForce;
 
-          if (Math.random() < 0.6) {
-            particles.push({
-              x: rwx,
-              y: rwy + bike.wheelRadius,
-              vx: -bike.vx * 0.3 - (Math.random() * 3 + 1),
-              vy: -Math.random() * 3 - 0.5,
-              size: 3 + Math.random() * 3,
-              color: '#d97706',
-              life: 0.9
-            });
-          }
+        // REACTION TORQUE: Lifts front wheel (Wheelie pitch effect!)
+        bike.angularVelocity -= 0.0022;
+
+        if (Math.random() < 0.6) {
+          particles.push({
+            x: rwx,
+            y: rwy + bike.wheelRadius,
+            vx: -bike.vx * 0.3 - (Math.random() * 3 + 1),
+            vy: -Math.random() * 3 - 0.5,
+            size: 3 + Math.random() * 3,
+            color: '#d97706',
+            life: 0.9
+          });
         }
       }
 
       if (bike.frontGrounded) {
         const penetration = (fwy + bike.wheelRadius) - groundFW;
         bike.y -= penetration * 0.55;
-        if (bike.vy > 0) {
-          bike.vy *= 0.25;
+        if (bike.vy > 0) bike.vy *= 0.25;
+      }
+
+      // 7. REALISTIC DISK BRAKE (Aşırı Güçlü Olmayan, Doğal Fren)
+      // Brake decelerates smoothly and pitches nose down (weight transfer!)
+      if (keys.down) {
+        bike.vx *= 0.965; // Smooth realistic braking (was 0.91)
+        if (bike.frontGrounded) {
+          bike.angularVelocity += 0.0016; // Front brake stoppie torque
         }
       }
 
-      // 5. NATURAL GROUND ALIGNMENT (Yerdeyken Yumuşak Denge)
-      if (bike.rearGrounded && bike.frontGrounded && !keys.left && !keys.right) {
-        const targetAngle = getTerrainSlope(bike.x);
-        const angleDiff = targetAngle - bike.angle;
-        bike.angularVelocity += angleDiff * 0.08;
-      }
-
-      // 6. BRAKE
-      if (keys.down) {
-        bike.vx *= 0.92;
-      }
-
-      // Smooth Air Drag & Rotational Damping
+      // Air resistance & Angular damping
       bike.vx *= 0.996;
       bike.angularVelocity *= 0.94;
 
-      // Update positions
+      // Apply Kinematics
       bike.x += bike.vx;
       bike.y += bike.vy;
       bike.angle += bike.angularVelocity;
       bike.wheelRotation += bike.vx * 0.08;
 
-      // Audio RPM
-      audio.updateRPM(keys.up, bike.vx);
+      // Sound update
+      audio.updateRPM(keys.up, bike.vx, isNitroActive);
 
-      // 7. FLIP DETECTION
+      // 8. FLIP DETECTION (360 Takla Bonusu & Nitro Doldurma)
       let diff = bike.angle - previousAngle;
       cumulativeRotation += diff;
       previousAngle = bike.angle;
 
       if (cumulativeRotation >= Math.PI * 2 * 0.88) {
         cumulativeRotation = 0;
-        showBonus('🔥 ÖN TAKLA BONUSU! +500');
+        nitro = Math.min(100, nitro + 40);
+        showToast('🔥 ÖN TAKLA BONUSU! +NİTRO DOLDU', 'bg-gradient-to-r from-amber-500 to-orange-500');
+        audio.playFuelPickup();
       } else if (cumulativeRotation <= -Math.PI * 2 * 0.88) {
         cumulativeRotation = 0;
-        showBonus('⚡ ARKA TAKLA BONUSU! +500');
+        nitro = Math.min(100, nitro + 40);
+        showToast('⚡ ARKA TAKLA BONUSU! +NİTRO DOLDU', 'bg-gradient-to-r from-cyan-500 to-blue-500');
+        audio.playFuelPickup();
       }
 
       if (bike.rearGrounded && bike.frontGrounded) {
         cumulativeRotation = 0;
       }
 
-      // 8. CHECKPOINTS
+      // 9. CHECKPOINT & REFILL
       for (let cp of checkpoints) {
         if (!passedCheckpoints.has(cp) && bike.x >= cp * 10) {
           passedCheckpoints.add(cp);
           lastCheckpointX = bike.x;
-          showCheckpoint(cp);
+          fuel = 100.0; // Refill fuel to 100% at checkpoint!
+          nitro = 100.0;
+          showToast(`🚩 KONTROL NOKTASI & BENZİN DOLDU: ${cp} m!`, 'bg-emerald-500');
+          audio.playFuelPickup();
         }
       }
 
-      // 9. CRASH DETECTION (Sadece sert kafa çarpmalarında kaza)
+      // 10. FUEL PICKUPS (Yol Üstü Benzin Bidonları)
+      for (let item of fuelPickups) {
+        if (!item.collected) {
+          const itemY = getTerrainHeight(item.x) - 35;
+          const dist = Math.hypot(bike.x - item.x, bike.y - itemY);
+          if (dist < 45) {
+            item.collected = true;
+            fuel = Math.min(100, fuel + 45.0);
+            audio.playFuelPickup();
+            showToast('⛽ BENZİN ALINDI! +45%', 'bg-amber-400');
+          }
+        }
+      }
+
+      // 11. TRAPS DETECTION (Spikes & Explosive TNT Barrels)
+      for (let trap of traps) {
+        const trapY = getTerrainHeight(trap.x);
+        if (trap.type === 'SPIKES') {
+          // Spike pit zone
+          if (bike.x >= trap.x - trap.width / 2 && bike.x <= trap.x + trap.width / 2) {
+            if (bike.y >= trapY - 18) {
+              triggerCrash('SPIKES');
+              return;
+            }
+          }
+        } else if (trap.type === 'TNT') {
+          const tntY = trapY - 20;
+          const dist = Math.hypot(bike.x - trap.x, bike.y - tntY);
+          if (dist < trap.radius + 20) {
+            triggerCrash('TNT');
+            return;
+          }
+        }
+      }
+
+      // 12. CRASH DETECTION (Head or Loop-out impact)
       const headX = bike.x - sinA * 54;
       const headY = bike.y - cosA * 54;
       const groundAtHead = getTerrainHeight(headX);
 
       // Inverted contact test
-      if (headY >= groundAtHead - 2 && Math.abs(cosA) < 0.4) {
-        triggerCrash();
+      if (headY >= groundAtHead - 4 && Math.abs(cosA) < 0.35) {
+        triggerCrash('CRASH');
       }
 
-      if (bike.y > 1400) {
-        triggerCrash();
+      if (bike.y > 1500) {
+        triggerCrash('CRASH');
       }
 
-      // HUD
+      // Update HUD
       const meters = Math.max(0, Math.floor(bike.x / 10));
       distVal.textContent = meters + ' m';
       speedVal.textContent = Math.max(0, Math.floor(Math.abs(bike.vx) * 6.5)) + ' km/s';
     }
 
-    // --- 1080p RENDERING ---
+    // --- 1080p RENDERING ENGINE ---
     function render() {
       ctx.clearRect(0, 0, NATIVE_W, NATIVE_H);
 
-      // Wide lead camera (bike at 32% from left, 60% from top)
       const targetCamX = bike.x - NATIVE_W * 0.32;
       const targetCamY = bike.y - NATIVE_H * 0.60;
       cameraX += (targetCamX - cameraX) * 0.12;
       cameraY += (targetCamY - cameraY) * 0.12;
 
-      // 1. Mountain Backdrop
+      // 1. Alpine Mountain Backdrop
       drawBackground(cameraX, cameraY);
 
-      // 2. Terrain & Checkpoints
+      // 2. Terrain, Traps, Fuel & Checkpoints
       ctx.save();
       ctx.translate(-cameraX, -cameraY);
       drawTerrain(cameraX);
+      drawTraps();
+      drawFuelPickups();
       drawCheckpoints();
 
       // 3. Particles
@@ -626,7 +815,7 @@
       ctx.fillStyle = sky;
       ctx.fillRect(0, 0, NATIVE_W, NATIVE_H);
 
-      // Distant Snowy Peaks (Parallax 0.08)
+      // Distant Snowy Peaks
       ctx.fillStyle = 'rgba(41, 37, 36, 0.7)';
       ctx.beginPath();
       ctx.moveTo(0, NATIVE_H);
@@ -638,7 +827,7 @@
       ctx.closePath();
       ctx.fill();
 
-      // Mid Ridges (Parallax 0.2)
+      // Mid Mountain Ridges
       ctx.fillStyle = 'rgba(28, 25, 23, 0.95)';
       ctx.beginPath();
       ctx.moveTo(0, NATIVE_H);
@@ -674,7 +863,7 @@
       ctx.fillStyle = earthGrad;
       ctx.fill();
 
-      // Asphalt/Dirt Starting Runway Highlight
+      // Golden dirt top trail
       ctx.beginPath();
       ctx.moveTo(startX, getTerrainHeight(startX));
       for (let x = startX; x <= endX; x += step) {
@@ -689,6 +878,115 @@
       ctx.stroke();
     }
 
+    // Draw Traps (Spikes & Explosive TNT Barrels)
+    function drawTraps() {
+      for (let trap of traps) {
+        const ty = getTerrainHeight(trap.x);
+
+        if (trap.type === 'SPIKES') {
+          // Steel/Red triangular danger spikes
+          const leftX = trap.x - trap.width / 2;
+          const numSpikes = 6;
+          const spikeW = trap.width / numSpikes;
+
+          for (let s = 0; s < numSpikes; s++) {
+            const sx = leftX + s * spikeW;
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(sx, ty + 2);
+            ctx.lineTo(sx + spikeW / 2, ty - 26);
+            ctx.lineTo(sx + spikeW, ty + 2);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          }
+
+          // Danger Warning Sign next to spikes
+          ctx.fillStyle = '#eab308';
+          ctx.fillRect(leftX - 25, ty - 50, 20, 20);
+          ctx.fillStyle = '#000000';
+          ctx.font = 'bold 14px sans-serif';
+          ctx.fillText('⚠️', leftX - 23, ty - 34);
+
+        } else if (trap.type === 'TNT') {
+          // Glowing Red Explosive Barrel
+          const bx = trap.x;
+          const by = ty - 22;
+
+          ctx.fillStyle = '#dc2626';
+          ctx.beginPath();
+          ctx.roundRect(bx - 16, by - 22, 32, 44, 4);
+          ctx.fill();
+
+          ctx.strokeStyle = '#facc15';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+
+          // TNT Label
+          ctx.fillStyle = '#ffffff';
+          ctx.font = 'black 12px sans-serif';
+          ctx.fillText('TNT', bx - 13, by + 4);
+
+          // Burning Sparking Fuse on top
+          ctx.strokeStyle = '#a8a29e';
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(bx, by - 22);
+          ctx.lineTo(bx + 4, by - 32);
+          ctx.stroke();
+
+          ctx.fillStyle = Math.random() > 0.5 ? '#f97316' : '#facc15';
+          ctx.beginPath();
+          ctx.arc(bx + 4, by - 32, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    // Draw Fuel Pickups (Floating Yellow/Amber Jerry Cans)
+    function drawFuelPickups() {
+      for (let item of fuelPickups) {
+        if (item.collected) continue;
+        const fy = getTerrainHeight(item.x) - 40 + Math.sin(Date.now() * 0.005) * 6;
+
+        ctx.save();
+        ctx.translate(item.x, fy);
+
+        // Halo glow
+        const glow = ctx.createRadialGradient(0, 0, 5, 0, 0, 32);
+        glow.addColorStop(0, 'rgba(245, 158, 11, 0.6)');
+        glow.addColorStop(1, 'rgba(245, 158, 11, 0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath();
+        ctx.arc(0, 0, 32, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Jerry can body
+        ctx.fillStyle = '#f59e0b';
+        ctx.beginPath();
+        ctx.roundRect(-16, -18, 32, 36, 6);
+        ctx.fill();
+
+        ctx.strokeStyle = '#78350f';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // Handle
+        ctx.fillStyle = '#b45309';
+        ctx.fillRect(-10, -25, 20, 7);
+
+        // Cap & ⛽ icon
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 14px sans-serif';
+        ctx.fillText('⛽', -7, 6);
+
+        ctx.restore();
+      }
+    }
+
     function drawCheckpoints() {
       for (let cp of checkpoints) {
         const cpx = cp * 10;
@@ -699,16 +997,22 @@
         ctx.lineWidth = 4;
         ctx.beginPath();
         ctx.moveTo(cpx, cpy);
-        ctx.lineTo(cpx, cpy - 70);
+        ctx.lineTo(cpx, cpy - 75);
         ctx.stroke();
 
+        // Flag Banner
         ctx.fillStyle = passed ? '#10b981' : '#f59e0b';
         ctx.beginPath();
-        ctx.moveTo(cpx, cpy - 70);
-        ctx.lineTo(cpx + 36, cpy - 55);
-        ctx.lineTo(cpx, cpy - 40);
+        ctx.moveTo(cpx, cpy - 75);
+        ctx.lineTo(cpx + 40, cpy - 58);
+        ctx.lineTo(cpx, cpy - 42);
         ctx.closePath();
         ctx.fill();
+
+        // Gas Pump Station Label
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText('⛽ FULL', cpx - 18, cpy - 82);
       }
     }
 
@@ -737,7 +1041,7 @@
       ctx.lineTo(26, -26);
       ctx.stroke();
 
-      // Frame
+      // Bike Frame
       ctx.fillStyle = '#dc2626';
       ctx.beginPath();
       ctx.moveTo(-30, -4);
@@ -766,10 +1070,10 @@
       ctx.lineTo(28, -42);
       ctx.stroke();
 
-      // Rider
+      // Rider with Dynamic Lean
       let leanOffset = 0;
-      if (keys.left) leanOffset = -12;
-      if (keys.right) leanOffset = 12;
+      if (keys.left) leanOffset = -14;
+      if (keys.right) leanOffset = 14;
 
       ctx.strokeStyle = '#1e3a8a';
       ctx.lineWidth = 9;
