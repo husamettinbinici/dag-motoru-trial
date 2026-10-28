@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Unreal Engine
+Binaries/*
+DerivedDataCache/*
+Intermediate/*
+Saved/*
+Build/*
+*.VC.db
+*.opendb
+.vs/
